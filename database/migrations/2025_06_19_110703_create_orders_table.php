@@ -14,8 +14,6 @@ return new class extends Migration
     Schema::create('orders', function (Blueprint $table) {
         $table->id();
 
-        // polymorphic relation
-        $table->unsignedBigInteger('user_id');
 
         $table->string('order_type');
         $table->decimal('shipping_price', 10, 2);

@@ -21,10 +21,12 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 });
 
 
-Route::middleware('auth:sanctum')->post('/user',[AuthController::class, 'store']); //used 1
+Route::post('/user',[AuthController::class, 'store']); //used 1
 
 
-
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('areas')
     ->group(function () {

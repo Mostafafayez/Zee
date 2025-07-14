@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\SystemInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
@@ -87,5 +88,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/merchants', [MerchantController::class, 'index']);
 });
 
+
+
+Route::apiResource('system-info', SystemInfoController::class);
 
 

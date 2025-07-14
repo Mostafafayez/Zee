@@ -83,20 +83,19 @@ class AuthController extends Controller
 
 
 
-
-
-    public function store(Request $request)
+public function store(Request $request)
 {
-
     if ($request->role === 'courier') {
         $user = Auth::user();
         if (!$user || !$user->hasRole('admin')) {
             return response()->json([
                 'message' => 'Only admin users can create couriers.',
-                'your_role' =>  'unauthenticated',
+                'your_role' => 'unauthenticated',
             ], 403);
         }
     }
+
+    // Validation
     $request->validate([
         'name' => 'required|string',
         'phone' => 'required|numeric|unique:users',
@@ -105,17 +104,19 @@ class AuthController extends Controller
         'password' => 'required|string|confirmed',
         'role' => 'required|in:merchant,courier,admin',
 
-
         // Courier-specific fields
         'national_id' => 'required_if:role,courier|string|unique:couriers,national_id',
-        'vehicle_info' => 'required_if:role,courier|string',
-        //merchant case
-         'company_name' =>'required_if:role,merchant|string',
+        'vehicle_type' => 'required_if:role,courier|string',
+        'license_number' => 'required_if:role,courier|string',
+        'vehicle_plate_number' => 'required_if:role,courier|string',
+        'license_image' => 'required_if:role,courier|file|mimes:jpg,jpeg,png,pdf',
+        'vehicle_plate_image' => 'required_if:role,courier|file|mimes:jpg,jpeg,png,pdf',
+
+        // Merchant-specific fields
+        'company_name' => 'required_if:role,merchant|string',
     ]);
 
 
-
-    // Create the user
     $newUser = User::create([
         'name' => $request->name,
         'phone' => $request->phone,
@@ -127,25 +128,37 @@ class AuthController extends Controller
 
     $newUser->assignRole(roles: $request->role);
 
-    // If role is courier, also create courier record
+
     if ($request->role === 'courier') {
+
+        $licenseImagePath = $request->hasFile('license_image')
+            ? $request->file('license_image')->store('couriers/licenses', 'public')
+            : null;
+
+        $vehiclePlateImagePath = $request->hasFile('vehicle_plate_image')
+            ? $request->file('vehicle_plate_image')->store('couriers/plates', 'public')
+            : null;
+
+        // Create the courier
         $courier = Courier::create([
             'user_id' => $newUser->id,
             'national_id' => $request->national_id,
-            'vehicle_info' => $request->vehicle_info,
+            'vehicle_type' => $request->vehicle_type,
             'rating' => 0,
+            'license_number' => $request->license_number,
+            'vehicle_plate_number' => $request->vehicle_plate_number,
+            'license_image' => $licenseImagePath,
+            'vehicle_plate_image' => $vehiclePlateImagePath,
         ]);
     }
 
-
+    // Handle merchant logic
     if ($request->role === 'merchant') {
-        $courier = Merchant::create([
+        $merchant = Merchant::create([
             'user_id' => $newUser->id,
             'company_name' => $request->company_name,
-
         ]);
     }
-
 
     return response()->json([
         'message' => ucfirst($request->role) . ' created successfully',
@@ -153,4 +166,5 @@ class AuthController extends Controller
         'courier' => $request->role === 'courier' ? $courier ?? null : null,
     ], 201);
 }
+
 }

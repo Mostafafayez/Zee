@@ -15,9 +15,13 @@ public function up()
         $table->id();
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
         $table->string('national_id');
-        $table->string('vehicle_info');
+        $table->string('vehicle_type');
         $table->decimal('rating', 3, 2)->default(0);
-        $table->timestamps();
+        $table->string('license_number')->nullable();
+        $table->string('vehicle_plate_number')->nullable();
+        $table->string('license_image')->nullable();
+        $table->string('vehicle_plate_image')->nullable();
+            $table->timestamps();
     });
 }
 

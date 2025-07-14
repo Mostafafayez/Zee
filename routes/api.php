@@ -21,7 +21,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 });
 
 
-Route::post('/user',[AuthController::class, 'store']); //used 1
+Route::middleware('auth:sanctum')->post('/user',[AuthController::class, 'store']); //used 1
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

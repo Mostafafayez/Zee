@@ -16,7 +16,7 @@ Route::get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);//num 2
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/users', [AuthController::class, 'createUser']);   // admin only
-    Route::put('/users/{user}/password', [AuthController::class, 'updatePassword']); // admin only
+    Route::post('/users/{user}/password', [AuthController::class, 'updatePassword']); // admin only
     Route::delete('/users/{userid}', [AuthController::class, 'destroy']); // admin only
 });
 

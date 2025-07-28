@@ -168,4 +168,22 @@ public function store(Request $request)
     ], 201);
 }
 
+
+
+public function countUsersByRole()
+{
+    $users = User::with('roles')->get();
+
+
+    $countByRole = $users->groupBy(function ($user) {
+        return $user->roles->pluck('name')->first(); 
+    })->map(function ($group) {
+        return $group->count();
+    });
+
+    return response()->json([
+        'data' => $countByRole
+    ]);
+}
+
 }

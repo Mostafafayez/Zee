@@ -19,6 +19,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/users', [AuthController::class, 'createUser']);   // admin only
     Route::post('/users/{user}/password', [AuthController::class, 'updatePassword']); // admin only
     Route::delete('/users/{userid}', [AuthController::class, 'destroy']); // admin only
+    Route::get('/users/count-by-role', [AuthController::class, 'countByRole']);
+
 });
 
 

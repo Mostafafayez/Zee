@@ -11,57 +11,68 @@ use App\Models\Area;
 
 class OrderController extends Controller
 {
-    public function store(Request $request)
-    {
-        $request->validate([
-             'country' => 'required|string|max:100',
-            'address' => 'required|string|max:255',
+   public function store(Request $request)
+{
+    $request->validate([
+        'country' => 'required|string|max:100',
+        'address' => 'required|string|max:255',
 
-            'details' => 'required|array|min:1',
+        // ✅ New validation rules for receiver info
+        'receiver_name' => 'nullable|string|max:255',
+        'receiver_address' => 'nullable|string|max:255',
+        'note' => 'nullable|string',
+        'estimated_delivery' => 'nullable|date',
 
-            'details.*.product_name' => 'required|string',
-            'details.*.quantity' => 'required|integer',
-            'details.*.price' => 'required|numeric',
-        ]);
-            $user = Auth::user() ;
-                  $role = $user->getRoleNames()->first();
+        'details' => 'required|array|min:1',
+        'details.*.product_name' => 'required|string',
+        'details.*.quantity' => 'required|integer',
+        'details.*.price' => 'required|numeric',
+    ]);
 
-            $order_price = collect($request->details)->sum('price');
-            $total_price = $order_price + $request->shipping_price;
+    $user = Auth::user();
+    $role = $user->getRoleNames()->first();
 
+    $order_price = collect($request->details)->sum('price');
 
-                $area = Area::where('name', $request->country)->first();
-
-                if (!$area) {
-                    return response()->json([
-                        'message' => 'Country not supported for shipping.',
-                    ], 400);
-                }
-
-                $shipping_price = $area->shipping_price;
-
-
-            $order = auth()->user()->orders()->create([
-                'order_type' => $role,
-                'shipping_price' => $shipping_price,
-                'order_price' => $order_price,
-                'total_price' => $total_price,
-                'country' => $request->country,
-                'address' => $request->address,
-                'track_number' => strtoupper(Str::random(10)),
-                'payment_method' => 'cash',
-                'status' => 'created',
-            ]);
-        foreach ($request->details as $item) {
-            $order->details()->create($item);
-        }
-
+    // Get shipping price based on country
+    $area = Area::where('name', $request->country)->first();
+    if (!$area) {
         return response()->json([
-            'message' => 'Order created',
-            'track_number' => $order->track_number,
-            'order' => $order
-        ]);
+            'message' => 'Country not supported for shipping.',
+        ], 400);
     }
+    $shipping_price = $area->shipping_price;
+    $total_price = $order_price + $shipping_price;
+
+    // ✅ Create order with new fields
+    $order = auth()->user()->orders()->create([
+        'order_type' => $role,
+        'shipping_price' => $shipping_price,
+        'order_price' => $order_price,
+        'total_price' => $total_price,
+        'country' => $request->country,
+        'address' => $request->address,
+        'track_number' => strtoupper(Str::random(10)),
+        'payment_method' => 'cash',
+        'status' => 'created',
+
+        // ✅ New fields
+        'receiver_name' => $request->receiver_name,
+        'receiver_address' => $request->receiver_address,
+        'note' => $request->note,
+        'estimated_delivery' => $request->estimated_delivery,
+    ]);
+
+    foreach ($request->details as $item) {
+        $order->details()->create($item);
+    }
+
+    return response()->json([
+        'message' => 'Order created',
+        'track_number' => $order->track_number,
+        'order' => $order
+    ]);
+}
 
     // 2. Admin delete
     public function destroy($track_number)

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class SystemInfo extends Model
 {
-    protected $table = 'system_info';
+    protected $table = 'system_info'; 
     protected $fillable = [
         'system_name',
         'email',

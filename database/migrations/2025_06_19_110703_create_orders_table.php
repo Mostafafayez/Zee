@@ -33,6 +33,13 @@ return new class extends Migration
         $table->text('delay_reason')->nullable();
         $table->dateTime('delay_date')->nullable();
 
+        $table->string('receiver_name')->nullable();
+        $table->string('receiver_address')->nullable();
+        $table->text('note')->nullable();
+        $table->timestamp('estimated_delivery')->nullable();
+
+
+
         $table->foreignId('courier_id')->nullable()->constrained()->onDelete('set null');
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
 

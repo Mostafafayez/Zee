@@ -17,7 +17,7 @@ class OrderController extends Controller
         'country' => 'required|string|max:100',
         'address' => 'required|string|max:255',
 
-        // ✅ New validation rules for receiver info
+
         'receiver_name' => 'nullable|string|max:255',
         'receiver_address' => 'nullable|string|max:255',
         'note' => 'nullable|string',
@@ -34,7 +34,6 @@ class OrderController extends Controller
 
     $order_price = collect($request->details)->sum('price');
 
-    // Get shipping price based on country
     $area = Area::where('name', $request->country)->first();
     if (!$area) {
         return response()->json([
@@ -44,7 +43,7 @@ class OrderController extends Controller
     $shipping_price = $area->shipping_price;
     $total_price = $order_price + $shipping_price;
 
-    // ✅ Create order with new fields
+
     $order = auth()->user()->orders()->create([
         'order_type' => $role,
         'shipping_price' => $shipping_price,
@@ -178,7 +177,7 @@ class OrderController extends Controller
     // 5. Get orders for current user
     public function myOrders()
     {
-        $orders = auth()->user()->orders()->with('details')->get();
+        $orders = auth()->user()->orders()->with('details','user')->get();
 
         return response()->json($orders);
     }

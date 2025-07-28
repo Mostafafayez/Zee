@@ -177,7 +177,7 @@ class OrderController extends Controller
     // 5. Get orders for current user
     public function myOrders()
     {
-        $orders = auth()->user()->orders()->with('details','user')->get();
+        $orders = auth()->user()->orders()->with('details','orders')->get();
 
         return response()->json($orders);
     }

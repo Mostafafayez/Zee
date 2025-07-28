@@ -18,10 +18,10 @@ class OrderController extends Controller
         'address' => 'required|string|max:255',
 
 
-        'receiver_name' => 'nullable|string|max:255',
-        'receiver_address' => 'nullable|string|max:255',
+        'receiver_name' => 'required|string|max:255',
+        'receiver_address' => 'required|string|max:255',
         'note' => 'nullable|string',
-        'estimated_delivery' => 'nullable|date',
+        'estimated_delivery' => 'required|date',
 
         'details' => 'required|array|min:1',
         'details.*.product_name' => 'required|string',

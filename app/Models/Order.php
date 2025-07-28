@@ -13,7 +13,8 @@ class Order extends Model
         'shipping_price', 'order_price', 'total_price',
         'track_number', 'payment_method', 'status',
         'failure_reason', 'delay_reason', 'delay_date',
-        'courier_id'
+        'courier_id' , 'receiver_name', 'receiver_address',
+         'note','estimated_delivery',
     ];
 
     public function user()

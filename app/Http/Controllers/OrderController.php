@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Area;
+use App\Helpers\ShipmentHelper;
+
+
+
+$transitions = ShipmentHelper::getAllowedStatusTransitions();
 
 class OrderController extends Controller
 {
@@ -119,7 +124,7 @@ class OrderController extends Controller
 
 
 
-    public function updateStatus(Request $request, $track_number)
+    public function updateStatus_v2(Request $request, $track_number)
     {
         $request->validate([
             'status' => 'required|string',
@@ -240,20 +245,52 @@ class OrderController extends Controller
         ], 404);
     }
 
-    if ($order->status === 'confirmed') {
+    if ($order->status === 'approved') {
         return response()->json([
-            'message' => 'Order already confirmed.',
+            'message' => 'Order already approved.',
             'order' => $order
         ], 200);
     }
 
-    $order->status = 'confirmed';
+    $order->status = 'approved';
     $order->save();
 
     return response()->json([
-        'message' => 'Order confirmed successfully.',
+        'message' => 'Order approved successfully.',
         'order' => $order
     ], 200);
+}
+
+
+
+public function updateStatus(Request $request)
+{
+    $request->validate([
+        'track_number' => 'required|string',
+        'new_status' => 'required|string',
+    ]);
+
+    $order = Order::where('track_number', $request->track_number)->first();
+
+    if (!$order) {
+        return response()->json(['message' => 'Order not found.'], 404);
+    }
+
+    $currentStatus = $order->status;
+    $newStatus = $request->new_status;
+    $role = auth()->user()->getRoleNames()->first(); // e.g. 'merchant', 'courier', 'admin'
+
+    if (!can_transition($currentStatus, $newStatus, $role)) {
+        return response()->json(['message' => 'You are not allowed to make this transition.'], 403);
+    }
+
+    $order->status = $newStatus;
+    $order->save();
+
+    return response()->json([
+        'message' => "Status changed to '$newStatus' successfully.",
+        'order' => $order
+    ]);
 }
 
 

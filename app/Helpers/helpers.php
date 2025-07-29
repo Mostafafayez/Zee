@@ -4,13 +4,10 @@ if (!function_exists('shipment_transitions')) {
     function shipment_transitions(): array {
         return [
             'pending' => [
-                'merchant' => ['approved', 'canceled'],
+                'admin' => ['approved', 'canceled'],
             ],
             'approved' => [
-                'merchant' => ['ready_for_pickup', 'canceled'],
-            ],
-            'ready_for_pickup' => [
-                'courier' => ['picked_up'],
+                  'courier' => ['picked_up']
             ],
             'picked_up' => [
                 'courier' => ['in_transit'],

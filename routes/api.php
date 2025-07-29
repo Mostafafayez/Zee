@@ -65,7 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
     Route::middleware(['auth:sanctum','role:admin'])->group(function () {
-        Route::post('/orders/status/v2', [OrderController::class, 'updateStatus']); // Admin update status
+   // Admin update status
           Route::post('/assign/{track_number}', [CourierController::class, 'assignOrderToCourier']);
 
 
@@ -77,7 +77,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/couriers/{id}/rate', [CourierController::class, 'rateCourier']);
 });
 
-
+     Route::middleware('auth:sanctum')->post('/orders/status/v2', [OrderController::class, 'updateStatus']);
 
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {

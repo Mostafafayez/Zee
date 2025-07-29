@@ -12,7 +12,7 @@ use App\Helpers\ShipmentHelper;
 
 
 
-$transitions = shipment_transitions(); 
+$transitions = shipment_transitions();
 
 class OrderController extends Controller
 {

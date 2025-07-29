@@ -12,7 +12,7 @@ use App\Helpers\ShipmentHelper;
 
 
 
-$transitions = ShipmentHelper::getAllowedStatusTransitions();
+$transitions = shipment_transitions(); 
 
 class OrderController extends Controller
 {

@@ -51,7 +51,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders', [OrderController::class, 'store']);                        // Add order
     Route::get('orders/me', [OrderController::class, 'myOrders']);                   // Get my orders
-    Route::get('/orders/status', [OrderController::class, 'filterMyOrders']);         // My orders by status
+    Route::get('/orders/filterstatus', [OrderController::class, 'filterMyOrders']);         // My orders by status
     Route::get('/orders/track/{track_number}', [OrderController::class, 'track']);    // Track by number
 
     Route::middleware('role:admin')->group(function () {

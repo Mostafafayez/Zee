@@ -26,10 +26,10 @@ if (!function_exists('shipment_transitions')) {
             ],
 
             'picked_up' => [
-                'courier' => ['in_transit'],
+                'courier' => ['on_the_way'],
             ],
 
-            'in_transit' => [
+            'on_the_way' => [
                 'courier' => ['delivered', 'failed_delivery'],
             ],
 
@@ -38,7 +38,7 @@ if (!function_exists('shipment_transitions')) {
             ],
 
             'retry_delivery' => [
-                'courier' => ['in_transit', 'delivered', 'failed_delivery'],
+                'courier' => ['on_the_way', 'delivered', 'failed_delivery'],
             ],
 
             'return_initiated' => [
@@ -49,10 +49,8 @@ if (!function_exists('shipment_transitions')) {
                 'admin' => ['confirmed'],
             ],
 
-            // Optional: courier cancels after assigned
-            'courier_canceled' => [
-                'admin' => ['reassigned', 'canceled'],
-            ],
+           
+
         ];
     }
 }

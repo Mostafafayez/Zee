@@ -54,12 +54,12 @@ class OrderController extends Controller
         'address' => $request->address,
         'track_number' => strtoupper(Str::random(10)),
         'payment_method' => 'cash',
-        'status' => 'created',
+        'status' => 'pending',
 
         // ✅ New fields
         'receiver_name' => $request->receiver_name,
         'receiver_address' => $request->receiver_address,
-        'receiver_location' => $request->receiver_location, 
+        'receiver_location' => $request->receiver_location,
         'note' => $request->note,
         'estimated_delivery' => $request->estimated_delivery,
     ]);
@@ -228,5 +228,33 @@ class OrderController extends Controller
         $order->save();
         return response()->json($order);
     }
+
+
+    public function confirmStatus(Request $request, $track_number)
+{
+    $order = Order::where('track_number', $track_number)->first();
+
+  if (!$order) {
+        return response()->json([
+            'message' => 'Order not found.'
+        ], 404);
+    }
+
+    if ($order->status === 'confirmed') {
+        return response()->json([
+            'message' => 'Order already confirmed.',
+            'order' => $order
+        ], 200);
+    }
+
+    $order->status = 'confirmed';
+    $order->save();
+
+    return response()->json([
+        'message' => 'Order confirmed successfully.',
+        'order' => $order
+    ], 200);
+}
+
 
 }

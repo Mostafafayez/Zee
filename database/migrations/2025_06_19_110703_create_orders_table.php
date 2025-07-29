@@ -26,7 +26,7 @@ return new class extends Migration
         $table->string('track_number')->unique();
         $table->enum('payment_method', ['cash', 'collected']);
         $table->enum('status', [
-            'created', 'confirmed_by_admin', 'assigned',
+            'pending', 'confirmed_by_admin', 'assigned',
             'on_the_way', 'delivered', 'failed', 'delayed', 'returned'
         ]);
         $table->text('failure_reason')->nullable();

@@ -58,6 +58,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/orders/{track_number}', [OrderController::class, 'destroy']); // Admin delete
         Route::get('/admin/orders', [OrderController::class, 'allOrders']);           // All users' orders
         Route::get('/admin/orders/status', [OrderController::class, 'filterAllOrders']); // All by status
+        Route::post('/orders/{track_number}/confirm', [OrderController::class, 'confirmStatus']);
+
         Route::post('/orders/{track_number}', [OrderController::class, 'confirmed_status']); // Admin delete
 
     });

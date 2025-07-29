@@ -14,7 +14,7 @@ class Order extends Model
         'track_number', 'payment_method', 'status',
         'failure_reason', 'delay_reason', 'delay_date',
         'courier_id' , 'receiver_name', 'receiver_address',
-         'note','estimated_delivery',
+         'note','estimated_delivery','receiver_location'
     ];
 
     public function user()

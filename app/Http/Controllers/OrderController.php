@@ -20,6 +20,7 @@ class OrderController extends Controller
 
         'receiver_name' => 'required|string|max:255',
         'receiver_address' => 'required|string|max:255',
+        'receiver_location' => 'required|string|max:255',
         'note' => 'nullable|string',
         'estimated_delivery' => 'required|date',
 
@@ -58,6 +59,7 @@ class OrderController extends Controller
         // ✅ New fields
         'receiver_name' => $request->receiver_name,
         'receiver_address' => $request->receiver_address,
+        'receiver_location' => $request->receiver_location, 
         'note' => $request->note,
         'estimated_delivery' => $request->estimated_delivery,
     ]);

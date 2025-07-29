@@ -35,6 +35,7 @@ return new class extends Migration
 
         $table->string('receiver_name')->nullable();
         $table->string('receiver_address')->nullable();
+        $table->text('receiver_location')->nullable();
         $table->text('note')->nullable();
         $table->timestamp('estimated_delivery')->nullable();
 

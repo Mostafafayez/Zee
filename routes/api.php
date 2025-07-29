@@ -77,7 +77,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/couriers/{id}/rate', [CourierController::class, 'rateCourier']);
 });
 
-     Route::middleware('auth:sanctum')->post('/orders/status', [OrderController::class, 'updateStatus']);
+     Route::middleware('auth:sanctum')->post('/change_status', [OrderController::class, 'updateStatus']);
 
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {

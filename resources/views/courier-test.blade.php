@@ -14,14 +14,13 @@
         Pusher.logToConsole = true;
 
         const courierId = 12; // ← Replace with actual courier user_id
-        const token = '36|B5RfdmofhNYlxzFFf3Kx41Nf2kbd0QrJynuGmaJc76215adf';
+            const token = '36|B5RfdmofhNYlxzFFf3Kx41Nf2kbd0QrJynuGmaJc76215adf'; // ✅ REAL Sanctum token
 
         window.Echo = new Echo({
             broadcaster: 'pusher',
             key: '36aecfe536488a5d12d8',
             cluster: 'eu',
             forceTLS: true,
-            encrypted: true,
             authEndpoint: 'https://zee.zynk-adv.com/broadcasting/auth',
             auth: {
                 headers: {
@@ -30,6 +29,7 @@
                 }
             }
         });
+
 
         Echo.private(`courier.${courierId}`)
             .listen('.order.assigned', (e) => {

@@ -16,6 +16,7 @@ Route::get('/courier-test', function (Request $request) {
 
 
 use Illuminate\Support\Facades\Broadcast;
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 
 Route::get('/courier-test', function () {
@@ -23,4 +24,10 @@ Route::get('/courier-test', function () {
     $token = '36|B5RfdmofhNYlxzFFf3Kx41Nf2kbd0QrJynuGmaJc76215adf'; // your real token
 
     return view('courier-test', compact('courierId', 'token'));
+});
+
+
+
+Route::post('/broadcasting/auth-test', function () {
+    return response()->json(['status' => 'working']);
 });

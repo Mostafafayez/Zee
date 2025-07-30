@@ -9,22 +9,30 @@ use App\Models\CourierRating;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+use App\Events\OrderAssigned;
 class CourierController extends Controller
 {
     // 1. Assign courier to order
-    public function assignOrderToCourier(Request $request, $track_number)
-    {
-        $request->validate([
-            'courier_id' => 'required|exists:users,id',
-        ]);
 
-        $order = Order::where('track_number', $track_number)->firstOrFail();
-        $order->user_id = $request->courier_id;
-        $order->status = 'confirmed';
-        $order->save();
 
-        return response()->json(['message' => 'Order assigned to courier']);
-    }
+public function assignOrderToCourier(Request $request, $track_number)
+{
+    $request->validate([
+        'courier_id' => 'required|exists:users,id',
+    ]);
+
+    $order = Order::where('track_number', $track_number)->firstOrFail();
+
+    $order->user_id = $request->courier_id;  
+    $order->status = 'assigned';
+    $order->save();
+
+    // Fire the event to notify the courier in real-time
+    broadcast(new OrderAssigned($order))->toOthers();
+
+    return response()->json(['message' => 'Order assigned to courier']);
+}
+
 
     // 2. Get all couriers
     public function getAllCouriers()

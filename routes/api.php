@@ -97,3 +97,11 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 Route::apiResource('system-info', SystemInfoController::class);
 
 
+
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
+
+
+Route::middleware(['auth:sanctum', 'role:courier'])->get('/courier/orders', [CourierController::class, 'getorderbycourierid']);
+

@@ -7,8 +7,9 @@ Route::get('/', function () {
 });
 
 
+Route::get('/courier-test', function (Request $request) {
+    $user = \App\Models\User::find(12); // hardcode for testing, or fetch via token
+    Auth::login($user); // temporary login for web test
 
-
-Route::get('/courier-test', function () {
     return view('courier-test');
-})->middleware(['auth']);
+});

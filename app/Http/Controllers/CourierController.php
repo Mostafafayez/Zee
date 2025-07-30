@@ -23,7 +23,7 @@ public function assignOrderToCourier(Request $request, $track_number)
 
     $order = Order::where('track_number', $track_number)->firstOrFail();
 
-    $order->user_id = $request->courier_id;  
+    $order->courier_id = $request->courier_id;
     $order->status = 'assigned';
     $order->save();
 

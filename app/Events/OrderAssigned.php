@@ -23,7 +23,7 @@ class OrderAssigned implements ShouldBroadcast
         return new PrivateChannel('courier.' . $this->order->courier_id);
     }
 
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return [
             'id' => $this->order->id,

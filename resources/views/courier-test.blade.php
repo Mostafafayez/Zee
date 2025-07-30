@@ -22,7 +22,7 @@
             cluster: 'eu',
             forceTLS: true,
             encrypted: true,
-            authEndpoint: 'https://zee.zynk-adv.com/broadcasting/auth',
+            // authEndpoint: 'https://zee.zynk-adv.com/broadcasting/auth',
             auth: {
                 headers: {
                     Authorization: 'Bearer ' + token,

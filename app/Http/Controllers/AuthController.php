@@ -74,15 +74,29 @@ class AuthController extends Controller
         return response()->json(['message' => 'Password updated']);
     }
 
-    public function destroy(User $user)
-    {
+    public function destroy($id)
+{
+    $user = User::find($id);
 
-        $user->delete();
-
-        return response()->json(['message' => 'User deleted']);
+    if (!$user) {
+        return response()->json(['message' => 'User not found.'], 404);
     }
 
+    // Optional: prevent deleting yourself
+    if (auth()->id() === $user->id) {
+        return response()->json(['message' => 'You cannot delete yourself.'], 403);
+    }
 
+    try {
+        $user->delete();
+        return response()->json(['message' => 'User deleted successfully.'], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Failed to delete user.',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
 
 
 public function store(Request $request)

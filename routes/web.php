@@ -17,4 +17,10 @@ Route::get('/courier-test', function (Request $request) {
 
 use Illuminate\Support\Facades\Broadcast;
 
-Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
+Route::get('/courier-test', function () {
+    $courierId = 12; // replace with the real courier's user_id
+    $token = '36|B5RfdmofhNYlxzFFf3Kx41Nf2kbd0QrJynuGmaJc76215adf'; // your real token
+
+    return view('courier-test', compact('courierId', 'token'));
+});

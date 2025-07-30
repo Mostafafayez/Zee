@@ -18,6 +18,10 @@ Route::get('/courier-test', function (Request $request) {
 use Illuminate\Support\Facades\Broadcast;
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
+Route::post('/broadcasting/auth', function () {
+    \Log::info('broadcasting.auth hit', ['user' => auth()->user()]);
+    return response()->json(['auth' => 'placeholder']); // just to test JSON
+});
 
 Route::get('/courier-test', function () {
     $courierId = 12; // replace with the real courier's user_id

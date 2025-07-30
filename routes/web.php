@@ -13,3 +13,8 @@ Route::get('/courier-test', function (Request $request) {
 
     return view('courier-test');
 });
+
+
+use Illuminate\Support\Facades\Broadcast;
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);

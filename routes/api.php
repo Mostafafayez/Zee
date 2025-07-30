@@ -99,6 +99,8 @@ Route::apiResource('system-info', SystemInfoController::class);
 
 
 
+use Illuminate\Support\Facades\Broadcast;
+
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 

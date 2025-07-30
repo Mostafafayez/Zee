@@ -29,7 +29,8 @@ class AuthController extends Controller
 
         return response()->json([
             'token' => $token,
-            'user' => $user
+            'user' => $user,
+            'role' => $user->getRoleNames(),
         ]);
     }
 
@@ -176,7 +177,7 @@ public function countUsersByRole()
 
 
     $countByRole = $users->groupBy(function ($user) {
-        return $user->roles->pluck('name')->first(); 
+        return $user->roles->pluck('name')->first();
     })->map(function ($group) {
         return $group->count();
     });

@@ -60,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/admin/orders/status', [OrderController::class, 'filterAllOrders']); // All by status
         Route::post('/orders/{track_number}/confirm', [OrderController::class, 'confirmStatus']);
 
-        Route::post('/orders/{track_number}', [OrderController::class, 'confirmed_status']); // Admin delete
+        Route::post('/orders/{track_number}', [OrderController::class, 'confirmed_status']); // Admin delete //not used
 
     });
 });

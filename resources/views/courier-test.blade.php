@@ -38,20 +38,23 @@
                 document.getElementById('output').textContent = "📬 New Order Assigned!\nFetching latest orders...";
 
                 // Fetch the courier's latest orders
-                fetch('https://zee.zynk-adv.com/api/courier/orders', {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
-                        Accept: '*/json*',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('output').textContent = "📦 Latest Orders:\n\n" + JSON.stringify(data, null, 2);
-                })
-                .catch(err => {
-                    document.getElementById('output').textContent = "❌ Error fetching orders: " + err;
-                });
-            });
+                    setTimeout(() => {
+                    fetch('https://zee.zynk-adv.com/api/courier/orders', {
+                        headers: {
+                            Authorization: 'Bearer ' + token,
+                            Accept: 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('output').textContent = "📦 Latest Orders:\n\n" + JSON.stringify(data, null, 2);
+                    })
+                    .catch(err => {
+                        document.getElementById('output').textContent = "❌ Error fetching orders: " + err;
+                    });
+                }, 300); // wait 300ms after the event
+
+                            });
     </script>
 </body>
 </html>

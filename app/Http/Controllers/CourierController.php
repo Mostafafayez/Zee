@@ -15,6 +15,21 @@ class CourierController extends Controller
     // 1. Assign courier to order
 
 
+
+public function getOrdersByCourier(Request $request)
+{
+    $courier = $request->user(); // get courier from token
+
+    $orders = $courier->orders()->latest()->get(); // get related orders
+
+    return response()->json([
+        'courier_id' => $courier->id,
+        'orders' => $orders,
+    ]);
+}
+
+
+
 public function assignOrderToCourier(Request $request, $track_number)
 {
     $request->validate([

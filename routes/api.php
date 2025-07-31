@@ -105,5 +105,6 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 
 
-Route::middleware(['auth:sanctum', 'role:courier'])->get('/courier/orders', [CourierController::class, 'getOrdersByCourier']);
+Route::middleware(['auth:sanctum', 'role:courier'])
+    ->get('/courier/orders', [CourierController::class, 'getOrdersByCourier']);
 

@@ -41,7 +41,7 @@
                 fetch('https://zee.zynk-adv.com/api/courier/orders', {
                     headers: {
                         Authorization: 'Bearer ' + token,
-                        Accept: 'application/json',
+                        Accept: '*/json*',
                     }
                 })
                 .then(response => response.json())

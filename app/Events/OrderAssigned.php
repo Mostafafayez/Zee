@@ -23,7 +23,7 @@ public function __construct(Order $order)
 
     public function broadcastOn()
     {
-        return new Channel('courier.' . $this->order->courier_id);
+        return new Channel('courier.' . 12);
     }
 
     public function broadcastWith(): array

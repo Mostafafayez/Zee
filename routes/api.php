@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Price_listController;
-
+use Illuminate\Support\Facades\Broadcast;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -99,7 +99,7 @@ Route::apiResource('system-info', SystemInfoController::class);
 
 
 
-use Illuminate\Support\Facades\Broadcast;
+
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 

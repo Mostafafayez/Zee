@@ -29,6 +29,7 @@ public function assignOrderToCourier(Request $request, $track_number)
 
     // Fire the event to notify the courier in real-time
     broadcast(new OrderAssigned($order))->toOthers();
+\Log::info('Broadcast was called for order: ' . $order->track_number);
 
     return response()->json(['message' => 'Order assigned to courier']);
 }

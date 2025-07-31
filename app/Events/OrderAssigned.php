@@ -13,20 +13,23 @@ class OrderAssigned implements ShouldBroadcast
 
     public $order;
 
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
+public function __construct(Order $order)
+{
+    $this->order = $order;
+
+    \Log::info('OrderAssigned event fired for order: ' . $this->order->track_number);
+}
+
 
     public function broadcastOn()
     {
-        return new PrivateChannel('courier.' . $this->order->courier_id);
+        return new Channel('courier.' . $this->order->courier_id);
     }
 
     public function broadcastWith(): array
     {
         return [
-            'id' => $this->order->id,
+            // 'id' => $this->order->id,
             'status' => $this->order->status,
             'order_data' => $this->order, // Customize as needed
         ];

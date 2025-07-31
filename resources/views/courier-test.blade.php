@@ -7,15 +7,17 @@
     <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
 </head>
 <body>
-    <h1>Courier Real-Time Notifications</h1>
-    <pre id="output"></pre>
+    <h1>📦 Courier Real-Time Notifications</h1>
+    <h3>Latest Orders:</h3>
+    <pre id="output">Waiting for assigned order...</pre>
 
     <script>
         Pusher.logToConsole = true;
 
-        const courierId = 12; // ← Replace with actual courier user_id
-            const token = '36|B5RfdmofhNYlxzFFf3Kx41Nf2kbd0QrJynuGmaJc76215adf'; // ✅ REAL Sanctum token
+        const courierId = 12; // replace with actual logged-in courier ID
+        const token = '37|GxpJf0oWJ5MJC1TNXnMrkInUFe9blPrpJjsuONfZe3c3b155'; // real token
 
+        // Initialize Echo
         window.Echo = new Echo({
             broadcaster: 'pusher',
             key: '36aecfe536488a5d12d8',
@@ -30,10 +32,25 @@
             }
         });
 
-
+        // Listen to order assigned event on private channel
         Echo.private(`courier.${courierId}`)
             .listen('.order.assigned', (e) => {
-                document.getElementById('output').textContent += '📦 Order Assigned:\n' + JSON.stringify(e, null, 2) + "\n\n";
+                document.getElementById('output').textContent = "📬 New Order Assigned!\nFetching latest orders...";
+
+                // Fetch the courier's latest orders
+                fetch('https://zee.zynk-adv.com/api/courier/orders', {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        Accept: 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('output').textContent = "📦 Latest Orders:\n\n" + JSON.stringify(data, null, 2);
+                })
+                .catch(err => {
+                    document.getElementById('output').textContent = "❌ Error fetching orders: " + err;
+                });
             });
     </script>
 </body>

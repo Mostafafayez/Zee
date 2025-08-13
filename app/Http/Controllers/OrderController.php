@@ -189,6 +189,17 @@ class OrderController extends Controller
         return response()->json($orders);
     }
 
+
+    public function Orders_user($userId)
+{
+    $orders = Order::with(['details', 'user'])
+        ->where('user_id', $userId)
+        ->get();
+
+    return response()->json($orders);
+}
+
+
     // 6. Admin update status
     public function filterMyOrders(Request $request)
     {

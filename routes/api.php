@@ -33,20 +33,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('areas')
     ->group(function () {
-    Route::get('/', [Price_listController::class, 'index']);
     Route::post('/', [Price_listController::class, 'store']);
     Route::get('/{id}', [Price_listController::class, 'show']);
     Route::post('/{id}', [Price_listController::class, 'update']);
     Route::delete('/{id}', [Price_listController::class, 'destroy']);
 });
 
-    Route::get('/', [Price_listController::class, 'index']);
+    Route::middleware('auth:sanctum')->get('/', [Price_listController::class, 'index']);
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin', fn () => 'Welcome Admin');
 });
-
-
+///
+//order by usr_id   ///////////////////////////////////////////////////////////////////////////////////////
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders', [OrderController::class, 'store']);                        // Add order
@@ -55,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders/track/{track_number}', [OrderController::class, 'track']);    // Track by number
 
     Route::middleware('role:admin')->group(function () {
+            Route::get('orders/{user_id}', [OrderController::class, 'Orders_user']);                   // Get my orders
         Route::delete('/orders/{track_number}', [OrderController::class, 'destroy']); // Admin delete
         Route::get('/admin/orders', [OrderController::class, 'allOrders']);           // All users' orders
         Route::get('/admin/orders/status', [OrderController::class, 'filterAllOrders']); // All by status

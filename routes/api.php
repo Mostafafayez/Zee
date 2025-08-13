@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('areas')
     Route::delete('/{id}', [Price_listController::class, 'destroy']);
 });
 
-    Route::middleware('auth:sanctum')->get('/', [Price_listController::class, 'index']);
+    Route::middleware('auth:sanctum')->get('/areas', [Price_listController::class, 'index']);
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin', fn () => 'Welcome Admin');

@@ -45,7 +45,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin', fn () => 'Welcome Admin');
 });
 ///
-//order by usr_id   ///////////////////////////////////////////////////////////////////////////////////////
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders', [OrderController::class, 'store']);                        // Add order
@@ -64,7 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     });
 });
-    Route::middleware(['auth:sanctum','role:admin'])->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
    // Admin update status
           Route::post('/assign/{track_number}', [CourierController::class, 'assignOrderToCourier']);
 

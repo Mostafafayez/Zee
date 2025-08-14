@@ -1,42 +1,43 @@
 <?php
+
+// app/Events/OrderAssigned.php
 namespace App\Events;
 
 use App\Models\Order;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow; // Now = no queue needed
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
 
-class OrderAssigned implements ShouldBroadcast
+
+class OrderAssigned implements ShouldBroadcastNow
 {
-    use SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $order;
+    public function __construct(public Order $order) {}
 
-public function __construct(Order $order)
-{
-    $this->order = $order;
-
-    \Log::info('OrderAssigned event fired for order: ' . $this->order->track_number);
-}
-
-
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
-        return new Channel('courier.' . 12);
+        // private-courier.{id}
+        return [new PrivateChannel('courier.' . $this->order->courier_id)];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'order.assigned';
     }
 
     public function broadcastWith(): array
     {
         return [
-            // 'id' => $this->order->id,
-            'status' => $this->order->status,
-            'order_data' => $this->order, // Customize as needed
+            'order_id'      => $this->order->id,
+            'track_number'  => $this->order->track_number,
+            'status'        => $this->order->status,
+            'address'       => $this->order->address,
+            'total_price'   => $this->order->total_price,
+            'assigned_at'   => now()->toISOString(),
         ];
     }
-
-    public function broadcastAs()
-    {
-        return 'order.assigned';
-    }
 }
+

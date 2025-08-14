@@ -23,15 +23,19 @@ Route::post('/broadcasting/auth', function () {
     return response()->json(['auth' => 'placeholder']); // just to test JSON
 });
 
-Route::get('/courier-test', function () {
-    $courierId = 12; // replace with the real courier's user_id
-    $token = '36|B5RfdmofhNYlxzFFf3Kx41Nf2kbd0QrJynuGmaJc76215adf'; // your real token
-
-    return view('courier-test', compact('courierId', 'token'));
-});
 
 
 
 Route::post('/broadcasting/auth-test', function () {
     return response()->json(['status' => 'working']);
+});
+
+
+
+Route::get('/test-pusher', function () {
+    return view('test-pusher');
+});
+
+Route::get('/courier-test', function () {
+    return view('courier-test');
 });

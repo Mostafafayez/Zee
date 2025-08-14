@@ -18,10 +18,10 @@
 
     <div class="card">
         <label>phone</label>
-        <input id="phone" type="phone" value="01152680012" autocomplete="username">
+        <input id="phone" type="phone" value="010000200000" autocomplete="username">
 
         <label>Password</label>
-        <input id="password" type="password" value="123456789" autocomplete="current-password">
+        <input id="password" type="password" value="12345678" autocomplete="current-password">
 
         <button id="loginBtn">Login & Go to courier-test</button>
         <div id="status" class="muted"></div>

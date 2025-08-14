@@ -49,7 +49,11 @@ return new class extends Migration
 
 
 
-        $table->foreignId('courier_id')->nullable()->constrained()->onDelete('set null');
+      $table->foreignId('courier_id')
+      ->nullable()
+      ->constrained('users')
+      ->onDelete('set null');
+
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
 
         $table->timestamps();

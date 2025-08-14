@@ -97,7 +97,9 @@ Route::apiResource('system-info', SystemInfoController::class);
 
 
 
-
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::post('/update_system-info/{id}', [SystemInfoController::class, 'update']);
+});
 
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);

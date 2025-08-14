@@ -117,24 +117,27 @@
         p.connection.bind('failed', () => { connStatus.textContent = 'Failed'; logEvent('Pusher failed to connect', 'err'); });
         p.connection.bind('disconnected', () => { connStatus.textContent = 'Disconnected'; logEvent('Pusher disconnected', 'err'); });
 
-        // Subscribe to the courier's private channel
-        const channelName = `courier.${courierId}`;
-        logEvent(`Subscribing to private channel: ${channelName}`);
+     <!-- ... باقي الكود كما هو ... -->
 
-        window.Echo.private(channelName)
-            .listen('.order.assigned', (e) => {
-                logEvent(`order.assigned → track:${e.track_number} | status:${e.status}`, 'ok');
-                console.log('EVENT_PAYLOAD', e);
-            })
-            .error((err) => {
-                logEvent('Channel subscription error (403 usually means not authorized). Check routes/channels.php rule.', 'err');
-                console.error('CHANNEL_ERROR', err);
-            });
+// Subscribe to the courier's public channel
+const channelName = `courier_zee`;
+
+window.Echo.channel(channelName) // قناة عامة
+    .listen('.order.assigned', (e) => {
+        logEvent(`order.assigned → track:${e.track_number} | status:${e.status}`, 'ok');
+        console.log('EVENT_PAYLOAD', e);
+    })
+    .error((err) => {
+        logEvent('Channel subscription error', 'err');
+        console.error('CHANNEL_ERROR', err);
     });
 
-    document.getElementById('clearBtn').addEventListener('click', () => {
-        eventsEl.innerHTML = '';
-    });
-    </script>
+    }); // ← قفل الـ connectBtn event listener هنا
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+    eventsEl.innerHTML = '';
+});
+
+</script>
 </body>
 </html>

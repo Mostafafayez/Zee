@@ -18,7 +18,7 @@
 
     <div class="card">
         <label>phone</label>
-        <input id="phone" type="phone" value="010000200000" autocomplete="username">
+        <input id="phone" type="phone" value="01152680012" autocomplete="username">
 
         <label>Password</label>
         <input id="password" type="password" value="12345678" autocomplete="current-password">

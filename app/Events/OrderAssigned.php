@@ -4,23 +4,27 @@
 namespace App\Events;
 
 use App\Models\Order;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow; // Now = no queue needed
+use Illuminate\Broadcasting\{Channel, PrivateChannel, PresenceChannel};
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast; // Now = no queue needed
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
 
-class OrderAssigned implements ShouldBroadcastNow
+class OrderAssigned implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+    public $order;
+    public function __construct(  $order) {
 
-    public function __construct(public Order $order) {}
+        $this->order = $order;
 
-    public function broadcastOn(): array
+    }
+
+    public function broadcastOn()
     {
-        // private-courier.{id}
-        return [new PrivateChannel('courier.' . $this->order->courier_id)];
+       return new Channel("courier_zee");
+
     }
 
     public function broadcastAs(): string
@@ -31,12 +35,8 @@ class OrderAssigned implements ShouldBroadcastNow
     public function broadcastWith(): array
     {
         return [
-            'order_id'      => $this->order->id,
-            'track_number'  => $this->order->track_number,
-            'status'        => $this->order->status,
-            'address'       => $this->order->address,
-            'total_price'   => $this->order->total_price,
-            'assigned_at'   => now()->toISOString(),
+            'order' => $this->order,
+
         ];
     }
 }

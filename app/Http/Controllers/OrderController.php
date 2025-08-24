@@ -190,6 +190,19 @@ class OrderController extends Controller
     }
 
 
+    public function myOrdersforCourier()
+{
+    $courier = auth()->user();
+
+    $orders = Order::where('courier_id', $courier->id)
+                ->with(['details', 'user'])
+                ->get();
+
+    return response()->json($orders, 200);
+}
+
+
+
     public function Orders_user($userId)
 {
     $orders = Order::with(['details', 'user'])

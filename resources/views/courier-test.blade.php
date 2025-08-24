@@ -13,6 +13,7 @@
         ul { padding-left: 16px; }
         code { background: #f7f7f7; padding: 2px 4px; border-radius: 6px; }
         button { padding: 8px 12px; cursor: pointer; }
+        #eventData { white-space: pre-wrap; background: #f4f4f4; padding: 10px; border-radius: 8px; margin: 10px 0; }
     </style>
 </head>
 <body>
@@ -21,17 +22,18 @@
     <div class="wrap">
         <div class="card">
             <h3>Connection</h3>
-            <p class="muted">Reads <code>courier_token</code> and <code>courier_id</code> from <code>localStorage</code> (set by <b>test-pusher.blade</b>), then subscribes to <code>private</code> channel <code>courier.{id}</code>.</p>
+            <p class="muted">Reads <code>courier_token</code> and <code>courier_id</code> from <code>localStorage</code>.</p>
             <p><b>Courier ID:</b> <span id="courierIdView">—</span></p>
             <p><b>Status:</b> <span id="connStatus">Not connected</span></p>
             <button id="connectBtn">Connect now</button>
             <button id="clearBtn">Clear logs</button>
-            <div class="muted" style="margin-top:8px">Tip: open DevTools Console for Pusher logs.</div>
         </div>
 
         <div class="card">
             <h3>Incoming Events</h3>
             <ul id="events"></ul>
+            <!-- هنا بنعرض JSON بتاع الأحداث -->
+            <div id="eventData"></div>
         </div>
     </div>
 
@@ -39,7 +41,6 @@
     <script src="https://js.pusher.com/8.2/pusher.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
     <script>
-    // Verbose logs for troubleshooting
     Pusher.logToConsole = true;
 
     const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -50,6 +51,7 @@
 
     const connStatus = document.getElementById('connStatus');
     const eventsEl = document.getElementById('events');
+    const eventDataEl = document.getElementById('eventData');
 
     function logEvent(text, cls) {
         const li = document.createElement('li');
@@ -59,8 +61,8 @@
     }
 
     function ensurePrereqs() {
-        if (!token) { logEvent('Missing courier_token in localStorage. Go to /test-pusher first.', 'err'); return false; }
-        if (!courierId) { logEvent('Missing courier_id in localStorage. Go to /test-pusher first.', 'err'); return false; }
+        if (!token) { logEvent('Missing courier_token in localStorage.', 'err'); return false; }
+        if (!courierId) { logEvent('Missing courier_id in localStorage.', 'err'); return false; }
         return true;
     }
 
@@ -68,18 +70,14 @@
         if (!ensurePrereqs()) return;
 
         connStatus.textContent = 'Connecting...';
-
-        // Required by Echo
         window.Pusher = Pusher;
 
-        // Use a custom authorizer so we can send the Bearer token without extra libs
         window.Echo = new Echo({
             broadcaster: 'pusher',
             key: "{{ env('PUSHER_APP_KEY') }}",
             cluster: "{{ env('PUSHER_APP_CLUSTER', 'mt1') }}",
             forceTLS: true,
             enabledTransports: ['ws', 'wss'],
-            // We explicitly call the auth endpoint and pass the Bearer token
             authorizer: (channel, options) => {
                 return {
                     authorize: (socketId, callback) => {
@@ -110,34 +108,25 @@
             }
         });
 
-        // Helpful connection lifecycle logs
         const p = window.Echo.connector.pusher;
         p.connection.bind('connected', () => { connStatus.textContent = 'Connected'; logEvent('Pusher connected', 'ok'); });
-        p.connection.bind('unavailable', () => { connStatus.textContent = 'Unavailable'; logEvent('Pusher unavailable (network)', 'err'); });
-        p.connection.bind('failed', () => { connStatus.textContent = 'Failed'; logEvent('Pusher failed to connect', 'err'); });
+        p.connection.bind('unavailable', () => { connStatus.textContent = 'Unavailable'; logEvent('Pusher unavailable', 'err'); });
+        p.connection.bind('failed', () => { connStatus.textContent = 'Failed'; logEvent('Pusher failed', 'err'); });
         p.connection.bind('disconnected', () => { connStatus.textContent = 'Disconnected'; logEvent('Pusher disconnected', 'err'); });
 
-     <!-- ... باقي الكود كما هو ... -->
-
-// Subscribe to the courier's public channel
-const channelName = `courier_zee`;
-
-window.Echo.channel(channelName) // قناة عامة
-    .listen('.order.assigned', (e) => {
-        logEvent(`order.assigned → track:${e.track_number} | status:${e.status}`, 'ok');
-        console.log('EVENT_PAYLOAD', e);
-    })
-    .error((err) => {
-        logEvent('Channel subscription error', 'err');
-        console.error('CHANNEL_ERROR', err);
+        // الاستماع للأحداث
+        window.Echo.channel('courier_zee')
+            .listen('.OrderStatusUpdated', (e) => {
+                logEvent("OrderStatusUpdated event received", 'ok');
+                const formattedData = JSON.stringify(e, null, 2);
+                eventDataEl.textContent += "\n\n" + formattedData;
+            });
     });
 
-    }); // ← قفل الـ connectBtn event listener هنا
-
-document.getElementById('clearBtn').addEventListener('click', () => {
-    eventsEl.innerHTML = '';
-});
-
-</script>
+    document.getElementById('clearBtn').addEventListener('click', () => {
+        eventsEl.innerHTML = '';
+        eventDataEl.textContent = '';
+    });
+    </script>
 </body>
 </html>

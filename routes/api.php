@@ -49,8 +49,10 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders', [OrderController::class, 'store']);                        // Add order
     Route::get('orders/me', [OrderController::class, 'myOrders']);                   // Get my orders
+
     Route::get('/orders/filterstatus', [OrderController::class, 'filterMyOrders']);         // My orders by status
     Route::get('/orders/track/{track_number}', [OrderController::class, 'track']);    // Track by number
+        Route::get('courier/myorders', [OrderController::class, 'myOrdersforCourier']);                   // Get my orders
 
     Route::middleware('role:admin')->group(function () {
             Route::get('orders/{user_id}', [OrderController::class, 'Orders_user']);                   // Get my orders
@@ -73,6 +75,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
     Route::get('/couriers', [CourierController::class, 'getAllCouriers']);
     Route::get('/couriers/with-orders', [CourierController::class, 'getCouriersWithOrders']);
+
     Route::post('/couriers/{id}/rate', [CourierController::class, 'rateCourier']);
 });
 

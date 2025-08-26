@@ -41,4 +41,15 @@ public function ordersThisWeek()
         return response()->json($daysOfWeek);
     }
 
+
+    public function ordersByStatus()
+    {
+        $orders = DB::table('orders')
+            ->select('status', DB::raw('COUNT(*) as total'))
+            ->groupBy('status')
+            ->get();
+
+        return response()->json($orders);
+    }
+
 }

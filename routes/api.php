@@ -86,8 +86,9 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::get('/finance/merchant/{user_id}', [FinanceController::class, 'merchantReport']);
-    Route::get('/finance/summary', [FinanceController::class, 'overallReport']);
+    Route::get('/finance/merchant/{user_id}', [FinanceController::class, 'merchantReport']);//not used
+    Route::get('/finance/summary', [FinanceController::class, 'overallReport']);//notused
+    Route::get('/reports/orders-week', [ReportController::class, 'ordersThisWeek']);
 });
 
 
@@ -123,3 +124,6 @@ Route::post('/admin/orders-report', [ReportController::class, 'adminReport']);
 Route::middleware(['auth:sanctum', 'role:merchant'])->group(function () {
 Route::get('/merchant/products', [MerchantController::class, 'product_merchant']);
 });
+
+
+

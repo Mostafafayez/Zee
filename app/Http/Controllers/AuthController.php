@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Models\Courier;
 use App\Models\Merchant;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -196,8 +197,12 @@ public function countUsersByRole()
         return $group->count();
     });
 
+        $totalOrders = Order::count();
+
+
     return response()->json([
-        'data' => $countByRole
+        'data' => $countByRole,
+        'order' => $totalOrders
     ]);
 }
 

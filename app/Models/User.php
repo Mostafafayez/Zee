@@ -71,5 +71,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(CourierRating::class);
     }
+
+    public function merchantProducts()
+    {
+        return $this->hasMany(MerchantProduct::class);
+    }
 }
 

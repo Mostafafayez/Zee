@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SystemInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -71,6 +72,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
   });
+
+
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
     Route::get('/couriers', [CourierController::class, 'getAllCouriers']);
@@ -112,3 +115,11 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware(['auth:sanctum', 'role:courier'])
     ->get('/courier/orders', [CourierController::class, 'getOrdersByCourier']);
 
+// routes/api.php
+Route::post('/admin/orders-report', [ReportController::class, 'adminReport']);
+
+
+
+Route::middleware(['auth:sanctum', 'role:merchant'])->group(function () {
+Route::get('/merchant/products', [MerchantController::class, 'product_merchant']);
+});

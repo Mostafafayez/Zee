@@ -115,12 +115,12 @@
         p.connection.bind('disconnected', () => { connStatus.textContent = 'Disconnected'; logEvent('Pusher disconnected', 'err'); });
 
         // الاستماع للأحداث
-        window.Echo.channel('courier_zee')
-            .listen('.OrderStatusUpdated', (e) => {
-                logEvent("OrderStatusUpdated event received", 'ok');
-                const formattedData = JSON.stringify(e, null, 2);
-                eventDataEl.textContent += "\n\n" + formattedData;
-            });
+     window.Echo.channel('courier_zee')
+    .listen('.order.assigned', (e) => {
+        logEvent("order.assigned event received", 'ok');
+        const formattedData = JSON.stringify(e, null, 2);
+        eventDataEl.textContent += "\n\n" + formattedData;
+    });
     });
 
     document.getElementById('clearBtn').addEventListener('click', () => {

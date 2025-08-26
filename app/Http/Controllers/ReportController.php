@@ -14,8 +14,9 @@ class ReportController extends Controller
 
 public function ordersThisWeek()
     {
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek   = Carbon::now()->endOfWeek();
+            $startOfWeek = Carbon::now()->startOfWeek(Carbon::SUNDAY);
+              $endOfWeek   = Carbon::now()->endOfWeek(Carbon::SATURDAY);
+
 
 
         $orders = DB::table('orders')

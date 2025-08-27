@@ -39,7 +39,6 @@ class MerchantController extends Controller
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
             'price'       => 'required|numeric|min:0',
-            'stock'       => 'required|integer|min:0',
         ]);
    $merchant = User::find($request->merchant_id);
 
@@ -54,7 +53,6 @@ class MerchantController extends Controller
             'name'        => $request->name,
             'description' => $request->description,
             'price'       => $request->price,
-            'stock'       => $request->stock,
         ]);
 
         return response()->json([

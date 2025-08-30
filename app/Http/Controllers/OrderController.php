@@ -31,7 +31,11 @@ class OrderController extends Controller
         'payment_method' => 'required|in:paid,unpaid',
 
         'details' => 'required|array|min:1',
-        'details.*.product_name' => 'required|string',
+        'details.*.product_name' => 'nullable|string',
+        'details.*.merchant_product_id' => 'nullable|exists:merchant_products,id',
+
+
+
         'details.*.quantity' => 'required|integer',
         'details.*.price' => 'required|numeric',
     ]);

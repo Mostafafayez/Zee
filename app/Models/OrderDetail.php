@@ -8,7 +8,7 @@ class OrderDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'order_id', 'merchant_product_id', 'quantity', 'price', 'notes',
+        'order_id', 'merchant_product_id', 'quantity', 'price', 'notes','product_name'
     ];
 
     public function order()

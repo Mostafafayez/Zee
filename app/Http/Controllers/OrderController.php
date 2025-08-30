@@ -28,6 +28,7 @@ class OrderController extends Controller
         'receiver_location' => 'required|string|max:255',
         'note' => 'nullable|string',
         'estimated_delivery' => 'required|date',
+        'payment_method' => 'required|in:paid,unpaid',
 
         'details' => 'required|array|min:1',
         'details.*.product_name' => 'required|string',
@@ -58,7 +59,7 @@ class OrderController extends Controller
         'country' => $request->country,
         'address' => $request->address,
         'track_number' => strtoupper(Str::random(10)),
-        'payment_method' => 'cash',
+        'payment_method' =>  $request->payment_method,
         'status' => 'pending',
 
         // ✅ New fields

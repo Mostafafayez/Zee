@@ -69,7 +69,7 @@ class FinanceController extends Controller
 
     $data = Order::where('user_id', $user->id)
         ->selectRaw('
-            SUM(shipment_price) as total_shipment_price,
+            SUM(shipping_price) as total_shipping_price,
             SUM(order_price) as total_order_price,
             SUM(total_price) as total_price
         ')
@@ -89,7 +89,7 @@ public function userPricesByStatus(Request $request)
     $data = Order::where('user_id', $user->id)
         ->where('status', $request->status)
         ->selectRaw('
-            SUM(shipment_price) as total_shipment_price,
+            SUM(shipping_price) as total_shipping_price,
             SUM(order_price) as total_order_price,
             SUM(total_price) as total_price
         ')
@@ -114,7 +114,7 @@ public function userPricesByStatus(Request $request)
     $data = Order::where('courier_id', $courier->id)
         ->where('status', $request->status)
         ->selectRaw('
-            SUM(shipment_price) as total_shipment_price,
+            SUM(shipping_price) as total_shipping_price,
             SUM(order_price) as total_order_price,
             SUM(total_price) as total_price
         ')

@@ -16,6 +16,13 @@ $transitions = shipment_transitions();
 
 class OrderController extends Controller
 {
+
+
+
+
+
+
+
    public function store(Request $request)
 {
     $request->validate([
@@ -63,7 +70,7 @@ class OrderController extends Controller
         'country' => $request->country,
         'address' => $request->address,
         'track_number' => strtoupper(Str::random(10)),
-        'payment_method' =>  $request->payment_type,
+        'payment_status' =>  $request->payment_type,
         'status' => 'pending',
 
         // ✅ New fields

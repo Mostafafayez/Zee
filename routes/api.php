@@ -98,9 +98,11 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/merchants', [MerchantController::class, 'index']);
     Route::post('/merchant/products', action: [MerchantController::class, 'store']);
+    Route::post('/orders/{track_number}/invoice', [merchantController::class, 'uploadInvoice']);
 
 });
 
+Route::post('/orders/{track_number}/invoice', [merchantController::class, 'uploadInvoice']);
 
 
 
@@ -132,3 +134,13 @@ Route::get('/merchant/products', [MerchantController::class, 'product_merchant']
 
 
     Route::get('/orders/track/{track_number}', [OrderController::class, 'track']);    // Track by number
+
+
+
+    Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/merchant/shipments/status', [ReportController::class, 'userShipmentsByStatus']);
+    Route::get('/merchant/prices/total', [FinanceController::class, 'userTotalPrices']);
+    Route::post('/merchant/prices/status', [FinanceController::class, 'userPricesByStatus']);
+    Route::post('/courier/prices/status', [FinanceController::class, 'courierPricesByStatus']);
+    Route::post('/merchant/orders/payment-status', [FinanceController::class, 'userOrdersByPaymentStatus']);
+});

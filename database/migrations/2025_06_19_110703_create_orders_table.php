@@ -22,9 +22,10 @@ return new class extends Migration
 
         $table->string('country')->nullable();
         $table->string('address')->nullable();
+        $table->string('invoice')->nullable();
 
         $table->string('track_number')->unique();
-        $table->enum('payment_method', ['cash', 'collected']);
+        $table->enum('payment_status', ['paid', 'unpaid']);
      $table->enum('status', [
     'pending',
     'approved',

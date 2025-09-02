@@ -62,4 +62,88 @@ class FinanceController extends Controller
             'company_profit' => $orders->sum('shipping_price'),
         ]);
     }
+
+    public function userTotalPrices()
+{
+    $user = auth()->user();
+
+    $data = Order::where('user_id', $user->id)
+        ->selectRaw('
+            SUM(shipment_price) as total_shipment_price,
+            SUM(order_price) as total_order_price,
+            SUM(total_price) as total_price
+        ')
+        ->first();
+
+    return response()->json($data);
+}
+
+public function userPricesByStatus(Request $request)
+{
+    $request->validate([
+        'status' => 'required|string'
+    ]);
+
+    $user = auth()->user();
+
+    $data = Order::where('user_id', $user->id)
+        ->where('status', $request->status)
+        ->selectRaw('
+            SUM(shipment_price) as total_shipment_price,
+            SUM(order_price) as total_order_price,
+            SUM(total_price) as total_price
+        ')
+        ->first();
+
+    return response()->json([
+        'status' => $request->status,
+        'totals' => $data
+    ]);
+}
+
+
+
+    public function courierPricesByStatus(Request $request)
+{
+    $request->validate([
+        'status' => 'required|string'
+    ]);
+
+    $courier = auth()->user();
+
+    $data = Order::where('courier_id', $courier->id)
+        ->where('status', $request->status)
+        ->selectRaw('
+            SUM(shipment_price) as total_shipment_price,
+            SUM(order_price) as total_order_price,
+            SUM(total_price) as total_price
+        ')
+        ->first();
+
+    return response()->json([
+        'status' => $request->status,
+        'totals' => $data
+    ]);
+}
+
+
+public function userOrdersByPaymentStatus(Request $request)
+{
+    $request->validate([
+        'payment_status' => 'required|string|in:paid,unpaid'
+    ]);
+
+    $user = auth()->user();
+
+    $count = Order::where('user_id', $user->id)
+        ->where('payment_status', $request->payment_status)
+        ->count();
+
+    return response()->json([
+        'payment_status' => $request->payment_status,
+        'total_orders' => $count
+    ]);
+}
+
+
 }

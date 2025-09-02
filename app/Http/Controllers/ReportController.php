@@ -53,4 +53,24 @@ public function ordersThisWeek()
         return response()->json($orders);
     }
 
+public function userShipmentsByStatus(Request $request)
+{
+    $request->validate([
+        'status' => 'required|string'
+    ]);
+
+    $user = auth()->user();
+
+    $count = Order::where('user_id', $user->id)
+        ->where('status', $request->status)
+        ->count();
+
+    return response()->json([
+        'status' => $request->status,
+        'total_shipments' => $count
+    ]);
+}
+
+
+
 }

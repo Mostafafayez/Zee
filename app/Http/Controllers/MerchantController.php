@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\MerchantProduct;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +61,38 @@ class MerchantController extends Controller
             'product' => $product
         ], 201);
     }
+
+
+
+public function uploadInvoice(Request $request, $track_number)
+{
+    $request->validate([
+        'invoice' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+    ]);
+
+    $order = Order::where('track_number', $track_number)->firstOrFail();
+
+    if ($request->hasFile('invoice')) {
+        $path = $request->file('invoice')->store('invoices', 'public');
+
+        $order->update([
+            'payment_status' => 'paid',
+            'invoice' => $path,
+        ]);
+
+        return response()->json([
+            'message' => 'Invoice uploaded successfully',
+            'data' => $order,
+            'invoice_url' => asset('storage/' . $path),
+        ], 200);
+    }
+
+    return response()->json([
+        'message' => 'No file uploaded'
+    ], 400);
+}
+
+
 
 
 
